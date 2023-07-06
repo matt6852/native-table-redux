@@ -1,18 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Provider, useDispatch } from 'react-redux';
+
+import { StyleSheet, View } from 'react-native';
+import { Provider, } from 'react-redux';
 import store from './store';
 import UserTable from './pages/UserTable';
+import { NativeBaseProvider, Box } from "native-base";
+
 
 
 export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
+      <NativeBaseProvider>
+        <View style={styles.container}>
+          <UserTable />
+        </View>
+      </NativeBaseProvider>
 
-        <StatusBar style="auto" />
-        <UserTable />
-      </View>
     </Provider>
 
   );

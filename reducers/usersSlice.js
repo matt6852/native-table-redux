@@ -26,23 +26,24 @@ const usersSlice = createSlice({
     state.users[userIndex] = updatedUser;
    }
   },
-  sortUsersByAge: (state, action) => {
-   const sortDirection = action.payload;
+  sortUsersByField: (state, action) => {
+   const { field, direction } = action.payload;
    state.users.sort((a, b) => {
-    if (sortDirection === 'asc') {
-     return a.age - b.age;
-    } else {
-     return b.age - a.age;
+    let valueA = a[field];
+    let valueB = b[field];
+    if (field === 'age') {
+     // Проверяем, является ли значение возраста числом
+     const ageA = parseInt(valueA);
+     const ageB = parseInt(valueB);
+     if (!isNaN(ageA) && !isNaN(ageB)) {
+      valueA = ageA;
+      valueB = ageB;
+     }
     }
-   });
-  },
-  sortUsersByLogin: (state, action) => {
-   const sortDirection = action.payload;
-   state.users.sort((a, b) => {
-    if (sortDirection === 'asc') {
-     return a.login.localeCompare(b.login);
+    if (direction === 'asc') {
+     return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
     } else {
-     return b.login.localeCompare(a.login);
+     return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
     }
    });
   },
@@ -52,7 +53,7 @@ const usersSlice = createSlice({
  },
 });
 
-export const { setUsers, removeUser, addUser, updateUser, sortUsersByAge, sortUsersByLogin, isLoading } = usersSlice.actions;
+export const { setUsers, removeUser, addUser, updateUser, sortUsersByAge, sortUsersByLogin, isLoading, sortUsersByField } = usersSlice.actions;
 
 export const fetchUsers = () => async (dispatch) => {
  dispatch(isLoading(true))
